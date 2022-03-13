@@ -36,21 +36,23 @@ def output(grid):
             elif i == 90: string += "J "
     print(string)
 
+# Ads a ship to the grid as per parameters
 def add_ship(grid, ship_type, location):
     ship_length = ship_size["Carrier"]
     for i in range(ship_length):
         grid[location + i] = "# "
-    print(ship_length)
 
+# Translates user input to grid location number
 def grid_to_location(row, column):
     location = 0
     location = grid_translate[row] + int(column)
     print(location)
     return location
     
-
+# Initialises blank grids
 pl_grid = blank_grid()
 pl_grid_shots = blank_grid()
+
 
 row = input("Enter Row A to J :")
 column = input("Enter Column 1 to 10:")
