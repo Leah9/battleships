@@ -3,6 +3,7 @@ import random
 print("BATTLESHIPS")
 print("Please enter your name :")
 #name = input()
+testing = 1
 
 grid_translate = {"A": 0, "B": 10, "C": 20, "D": 30, "E": 40, "F": 50, "G": 60, "H": 70, "I": 80, "J": 90}
 
@@ -38,9 +39,9 @@ def output(grid):
     print(string)
 
 # Ads a ship to the grid as per parameters
-def add_ship(grid, ship_type, location):
+def add_ship(grid, ship, location):
     
-    ship_length = ship_size["Carrier"]
+    ship_length = ship_size[ship] #ship_size["Carrier"]
     for i in range(ship_length):
         grid[location + i] = "# "
 
@@ -48,39 +49,106 @@ def add_ship(grid, ship_type, location):
 def grid_to_location(row, column):
     location = 0
     location = grid_translate[row] + int(column)
+    print(location)
     return location
 
-# Generates a random position for ship taking into account its length
-def random_position_select(length):
-
+# Generates a random position for ship taking into account its
+# length
+def random_position_select(length, grid):
+    
     num1 = random.randrange(0, 9)
     num2 = random.randrange(1, 10 - length + 2)
     num = num1 * 10 + num2
-    print("Num 1 = ", num1,"Num 2 = ", num2)
-    print(num)
-    print("Num 2 ", num2)
-    
+    #print("Num 1 = ", num1,"Num 2 = ", num2)
+    #print(num)
+    #print("Num 2 ", num2)
+    # Check it does not overlap another ship
+    for i in range(length):
+        #print(i)
+        if grid[num + i] == "# ":
+            num = -1
+            #print("CRASH" , num)
+            return num
     return num
 
 
 # Initialises blank grids
 pl_grid = blank_grid()
 pl_grid_shots = blank_grid()
+cpu_grid = blank_grid()
+cpu_grid_shots = blank_grid()
 
 
-row = "D"#input("Enter Row A to J :")
-row = row.upper()
-column = 5 # input("Enter Column 1 to 10:")
-location = grid_to_location(row, column)
+# Generate player ships placement
+for i in ship_size:
+    pos = 0
+    #print("Ship Size" , ship_size[i])
+    #print(i)
+    while pos <= 0:
+        pos = random_position_select(ship_size[i], pl_grid)
+    add_ship(pl_grid, i, pos)
 
-pos = random_position_select(5)
-add_ship(pl_grid, "Carrier", pos)
+for i in ship_size:
+    pos = 0
+    #print("Ship Size" , ship_size[i])
+    #print(i)
+    while pos <= 0:
+        pos = random_position_select(ship_size[i], cpu_grid)
+    add_ship(cpu_grid, i, pos)
+
+def player_input():
+    row = input("Enter Row A to J :")
+    row = row.upper()
+    column = input("Enter Column 1 to 10:")
+    print(row, column)
+    return grid_to_location(row, column)
+
+def count_lives(grid):
+    count = 0
+    for i in grid:
+        if grid[i] == "# ":
+            count += 1
+    print(count)
+    return count
+
+def check_shot(grid, shot):
+    if grid[shot] == "# ":
+        if grid == cpu_grid:
+            cpu_grid[shot] = "X "
+            pl_grid_shots[shot] = "X "
+        #if grid == pl_grid:
+            
+
 
 print("Shots on enemy")
 output(pl_grid_shots)
 
 print("Player ships")
 output(pl_grid)
+
+
+
+player_lives = count_lives(pl_grid)
+cpu_lives = count_lives(cpu_grid)
+
+while player_lives >= 1 and cpu_lives >= 1:
+    if testing == 1:
+        print("Shots by enemy")
+        output(cpu_grid_shots)
+        print("CPU ships")
+        output(cpu_grid)
+    print("Shots on enemy")
+    output(pl_grid_shots)
+
+    print("Player ships")
+    output(pl_grid)
+
+    shot = player_input()
+    check_shot(cpu_grid, shot)
+    print(shot)
+
+    player_lives = count_lives(pl_grid)
+    cpu_lives = count_lives(cpu_grid)
 
 
 
