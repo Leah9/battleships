@@ -3,8 +3,10 @@ print("BATTLESHIPS")
 print("Please enter your name :")
 #name = input()
 
+grid_translate = {"A": 0, "B": 10, "C": 20, "D": 30, "E": 40, "F": 50, "G": 60, "H": 70, "I": 80, "J": 90}
+
 ship_type = {1: "Carrier", 2:"Battleship", 3:"Cruiser", 4:"Submarine", 5: "Destroyer"}
-Ship_size = {"Carrier": 5, "Battleship": 4, "Cruiser": 3, "Submarine": 3, "Destroyer":2}
+ship_size = {"Carrier": 5, "Battleship": 4, "Cruiser": 3, "Submarine": 3, "Destroyer":2}
 # Create a blank grid and return
 def blank_grid():
     grid = {}
@@ -35,16 +37,32 @@ def output(grid):
     print(string)
 
 def add_ship(grid, ship_type, location):
-    pass
+    ship_length = ship_size["Carrier"]
+    for i in range(ship_length):
+        grid[location + i] = "# "
+    print(ship_length)
 
+def grid_to_location(row, column):
+    location = 0
+    location = grid_translate[row] + int(column)
+    print(location)
+    return location
+    
 
 pl_grid = blank_grid()
 pl_grid_shots = blank_grid()
+
+row = input("Enter Row A to J :")
+column = input("Enter Column 1 to 10:")
+location = grid_to_location(row, column)
+add_ship(pl_grid, "Carrier", 25)
 
 print("Shots on enemy")
 output(pl_grid_shots)
 
 print("Player ships")
 output(pl_grid)
+
+
 
 exit()
