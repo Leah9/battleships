@@ -1,3 +1,4 @@
+import random
 # BATTLESHIPS
 print("BATTLESHIPS")
 print("Please enter your name :")
@@ -38,6 +39,7 @@ def output(grid):
 
 # Ads a ship to the grid as per parameters
 def add_ship(grid, ship_type, location):
+    
     ship_length = ship_size["Carrier"]
     for i in range(ship_length):
         grid[location + i] = "# "
@@ -46,24 +48,40 @@ def add_ship(grid, ship_type, location):
 def grid_to_location(row, column):
     location = 0
     location = grid_translate[row] + int(column)
-    print(location)
     return location
+
+# Generates a random position for ship taking into account its length
+def random_position_select(length):
+
+    num1 = random.randrange(0, 9)
+    num2 = random.randrange(1, 10 - length + 2)
+    num = num1 * 10 + num2
+    print("Num 1 = ", num1,"Num 2 = ", num2)
+    print(num)
+    print("Num 2 ", num2)
     
+    return num
+
+
 # Initialises blank grids
 pl_grid = blank_grid()
 pl_grid_shots = blank_grid()
 
 
-row = input("Enter Row A to J :")
-column = input("Enter Column 1 to 10:")
+row = "D"#input("Enter Row A to J :")
+row = row.upper()
+column = 5 # input("Enter Column 1 to 10:")
 location = grid_to_location(row, column)
-add_ship(pl_grid, "Carrier", 25)
+
+pos = random_position_select(5)
+add_ship(pl_grid, "Carrier", pos)
 
 print("Shots on enemy")
 output(pl_grid_shots)
 
 print("Player ships")
 output(pl_grid)
+
 
 
 
