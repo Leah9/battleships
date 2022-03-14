@@ -14,10 +14,10 @@ H 71
 I 81
 J 91
 
-Empty " - "
-hit = " X "
-miss = " ~ "
-Ship = " # "
+Empty "--"
+hit = "X "
+miss = "~ "
+Ship = "# "
 
 Ship Types
 1. Carrier #####
