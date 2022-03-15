@@ -1,10 +1,13 @@
 import random
+from os import system, name
 # BATTLESHIPS
 print("BATTLESHIPS")
 print("Please enter your name :")
 
 player_name = input()
 testing = 0
+cpu_last_shot = ["No shots taken"]
+player_last_shot = ["No shots taken"]
 
 grid_translate = {"A": 0, "B": 10, "C": 20, "D": 30, "E": 40, "F": 50, "G": 60, "H": 70, "I": 80, "J": 90}
 
@@ -105,17 +108,21 @@ def check_shot(grid, shot):
         if grid == cpu_grid:
             cpu_grid[shot] = "X "
             pl_grid_shots[shot] = "X "
+            player_last_shot[0] = "Player hit an enemy ship"
         if grid == pl_grid:
             pl_grid[shot] = "X "
             cpu_grid_shots[shot] = "X "
+            cpu_last_shot[0] = "CPU hit one of your ships"
 
     elif grid[shot] == "- ":
         if grid == cpu_grid:
             cpu_grid[shot] = "~ "
             pl_grid_shots[shot] = "~ "
+            player_last_shot[0] = "Player missed"
         if grid == pl_grid:
             pl_grid[shot] = "~ "
             cpu_grid_shots[shot] = "~ "
+            cpu_last_shot[0] = "CPU missed"
 
 def cpu_take_shot():
     num = random.randrange(1, 100)
@@ -127,6 +134,13 @@ pl_grid_shots = blank_grid()
 cpu_grid = blank_grid()
 cpu_grid_shots = blank_grid()
 
+def clear_screen():
+    # for windows
+    if name == 'nt':
+        _ = system('cls')
+    # for mac and linux(here, os.name is 'posix')
+    else:
+        _ = system('clear')
 
 # Generate player ships placement
 for i in ship_size:
@@ -147,11 +161,11 @@ for i in ship_size:
 
 
             
-print("Shots on enemy")
-output(pl_grid_shots)
+#print("Shots on enemy")
+#output(pl_grid_shots)
 
-print("Player ships")
-output(pl_grid)
+#print("Player ships")
+#output(pl_grid)
 
 player_lives = count_lives(pl_grid)
 cpu_lives = count_lives(cpu_grid)
@@ -167,7 +181,8 @@ while player_lives >= 1 and cpu_lives >= 1:
 
     print("Player ships")
     output(pl_grid)
-
+    print(cpu_last_shot[0])
+    print(player_last_shot[0])
     shot = player_input()
     check_shot(cpu_grid, shot)
     print(shot)
@@ -177,6 +192,9 @@ while player_lives >= 1 and cpu_lives >= 1:
     player_lives = count_lives(pl_grid)
     cpu_lives = count_lives(cpu_grid)
 
+    clear_screen()
+
+    
 if player_lives == 0:
     print("CPU wins !!! better luck next time ", player_name)
 else:
