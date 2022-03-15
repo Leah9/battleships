@@ -2,17 +2,18 @@ import random
 from os import system, name
 # BATTLESHIPS
 print("BATTLESHIPS")
-print("Please enter your name :")
+#print("Please enter your name :")
 
-player_name = input()
+player_name = input("Plese enter your name :")
 testing = 0
 cpu_last_shot = ["No shots taken"]
 player_last_shot = ["No shots taken"]
-
 grid_translate = {"A": 0, "B": 10, "C": 20, "D": 30, "E": 40, "F": 50, "G": 60, "H": 70, "I": 80, "J": 90}
-
 ship_type = {1: "Carrier", 2:"Battleship", 3:"Cruiser", 4:"Submarine", 5: "Destroyer"}
 ship_size = {"Carrier": 5, "Battleship": 4, "Cruiser": 3, "Submarine": 3, "Destroyer":2}
+player_lives = 1
+cpu_lives = 1
+
 # Create a blank grid and return
 def blank_grid():
     grid = {}
@@ -43,8 +44,7 @@ def output(grid):
     print(string)
 
 # Ads a ship to the grid as per parameters
-def add_ship(grid, ship, location):
-    
+def add_ship(grid, ship, location): 
     ship_length = ship_size[ship] #ship_size["Carrier"]
     for i in range(ship_length):
         grid[location + i] = "# "
@@ -59,7 +59,6 @@ def grid_to_location(row, column):
 # Generates a random position for ship taking into account its
 # length
 def random_position_select(length, grid):
-    
     num1 = random.randrange(0, 9)
     num2 = random.randrange(1, 10 - length + 2)
     num = num1 * 10 + num2
@@ -77,7 +76,6 @@ def random_position_select(length, grid):
 
 def player_input():
     while True:
-
         row = input("Enter Row A to J or X to quit:")
         row = row.upper()
         if row == "X":
@@ -128,12 +126,6 @@ def cpu_take_shot():
     num = random.randrange(1, 100)
     check_shot(pl_grid, num)
 
-# Initialises blank grids
-pl_grid = blank_grid()
-pl_grid_shots = blank_grid()
-cpu_grid = blank_grid()
-cpu_grid_shots = blank_grid()
-
 def clear_screen():
     # for windows
     if name == 'nt':
@@ -141,6 +133,12 @@ def clear_screen():
     # for mac and linux(here, os.name is 'posix')
     else:
         _ = system('clear')
+
+# Initialises blank grids
+pl_grid = blank_grid()
+pl_grid_shots = blank_grid()
+cpu_grid = blank_grid()
+cpu_grid_shots = blank_grid()
 
 # Generate player ships placement
 for i in ship_size:
@@ -159,42 +157,30 @@ for i in ship_size:
         pos = random_position_select(ship_size[i], cpu_grid)
     add_ship(cpu_grid, i, pos)
 
-
-            
-#print("Shots on enemy")
-#output(pl_grid_shots)
-
-#print("Player ships")
-#output(pl_grid)
-
-player_lives = count_lives(pl_grid)
-cpu_lives = count_lives(cpu_grid)
-
+# MAIN LOOP
 while player_lives >= 1 and cpu_lives >= 1:
-    if testing == 1:
+    if testing == 1: # Shows CPU ship positions and shots for testing
         print("Shots by CPU")
         output(cpu_grid_shots)
         print("CPU ships")
         output(cpu_grid)
+    #Main display output
     print("Shots on enemy")
     output(pl_grid_shots)
-
     print("Player ships")
     output(pl_grid)
     print(cpu_last_shot[0])
     print(player_last_shot[0])
+    #Player takes a shot
     shot = player_input()
     check_shot(cpu_grid, shot)
     print(shot)
-
-    cpu_take_shot()
-
+    cpu_take_shot() #CPU takes shot
     player_lives = count_lives(pl_grid)
     cpu_lives = count_lives(cpu_grid)
 
     clear_screen()
 
-    
 if player_lives == 0:
     print("CPU wins !!! better luck next time ", player_name)
 else:
