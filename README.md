@@ -1,6 +1,8 @@
 # BATTLESHIPS
 ### Battleships in python terminal
 
+### This was one of my first Python applications and part of a Codecademy Python course.
+
 First playable version allows a player to play against the CPU. The CPU player is not very good at all and most players should be able to win.
 
 Each player has 5 ships randomly placed in the play area.
